@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Service\Text2ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +24,25 @@ class PostCrudController extends AbstractController
     }
 
     #[Route('/new', name: 'app_post_crud_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, Text2ImageService $text2ImageService): Response
     {
         $post = new Post();
+        $post->setCreatedAt(new \DateTime());
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+//            $content = $post->getContent();
+//            $imageUrl = $text2ImageService->generateImage($content);
+//
+//            if ($imageUrl) {
+//                $post->setImageUrl($imageUrl);
+//            }
+
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_post_crud_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_post_crud_edit', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post_crud/new.html.twig', [
@@ -74,8 +83,9 @@ class PostCrudController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();
+            $this->addFlash('success', 'Votre article a été supporimé. Bonne journée');
         }
 
-        return $this->redirectToRoute('app_post_crud_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_index', [], Response::HTTP_SEE_OTHER);
     }
 }

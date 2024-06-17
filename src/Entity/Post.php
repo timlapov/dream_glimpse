@@ -35,6 +35,9 @@ class Post
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'post')]
     private Collection $likes;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $imageBase64 = null;
+
     public function __construct()
     {
         $this->likes = new ArrayCollection();
@@ -119,6 +122,18 @@ class Post
                 $like->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageBase64(): ?string
+    {
+        return $this->imageBase64;
+    }
+
+    public function setImageBase64(?string $imageBase64): static
+    {
+        $this->imageBase64 = $imageBase64;
 
         return $this;
     }

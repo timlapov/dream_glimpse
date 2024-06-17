@@ -3,32 +3,33 @@
 {% block title %}Post{% endblock %}
 
 {% block body %}
-    <h1>Post</h1>
+    {{ include('navbar.html.twig') }}
+    <h1 class="text-center m-5 p-3">Post</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ post.content }}</td>
-            </tr>
-            <tr>
-                <th>ImageUrl</th>
-                <td>{{ post.imageUrl }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_post_crud_index') }}">back to list</a>
-
-    <a href="{{ path('app_post_crud_edit', {'id': post.id}) }}">edit</a>
-
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-4">
+                    <div class="col mx-auto">
+                        <div class="card shadow-sm">
+                            <img src="{{ post.imageUrl }}" class="card-img-top" alt="post image">
+                            <div class="card-body">
+                                <p class="card-text">{{ post.content }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="{{ path('app_post_crud_edit', {'id': post.id} ) }}" type="button" class="btn btn-sm btn-outline-secondary">Modifier</a>
+{#                                        <a href="{{ path('app_post_crud_delete', {'id': post.id}) }}" type="button" class="btn btn-sm btn-outline-danger">Supprimer</a>#}
+                                        <form method="post" action="{{ path('app_post_crud_delete', {'id': post.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');" >
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
+                                            <button class="btn btn-sm btn-outline-danger" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">Supprimer</button>
+                                        </form>
+                                    </div>
+                                    <small class="text-body-secondary">{{ post.createdAt|date('d M Y - H:i') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
     {{ include('post_crud/_delete_form.html.twig') }}
 {% endblock %}
