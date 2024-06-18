@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Merci pour votre inscription !</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff6f61;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        p {
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">Merci pour votre inscription !</div>
+    <p>Cher/Chère {{ userEmail }},</p>
+    <p>Merci de vous être inscrit à notre newsletter !</p>
+    <p>Nous sommes ravis de vous compter parmi nous.</p>
+    <div class="footer">Cordialement,<br>Dream Glimpse</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
