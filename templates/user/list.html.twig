@@ -16,7 +16,7 @@
                         </div>
                         <div class="text-left">
                             <h5 class="card-title">{{ user.username }}</h5>
-                            <a href="#" class="btn btn-primary">Regarder {{ user.posts|length }} articles</a>
+                            <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-primary">Regarder {{ user.posts|length }} articles</a>
                         </div>
                     </div>
                 </div>

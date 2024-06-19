@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+    {{ include('navbar.html.twig') }}
+    <h1 class="text-center p-3 m-5">{{ user }}</h1>
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for post in posts %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="{{ post.imageUrl }}" class="card-img-top" alt="post image">
+                        <div class="card-body">
+                            <p class="card-text">{{ post.content|slice(0, 100) ~ (post.content|length > 100 ? '...' : '') }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Like</a>
+                                    <a href="{{ path('app_post_crud_show', {'id': post.id} ) }}" type="button" class="btn btn-sm btn-outline-secondary">Lire la suite</a>
+                                </div>
+                                <small class="text-body-secondary">{{ post.createdAt|date('d M Y - H:i') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
