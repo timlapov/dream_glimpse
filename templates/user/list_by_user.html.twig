@@ -4,14 +4,24 @@
 
 {% block body %}
     {{ include('navbar.html.twig') }}
-    <h1 class="text-center p-3 m-5">{{ user }}</h1>
+
+    <div class="container p-3 m-5">
+        <div class="d-flex align-items-center">
+            {% if user.userImage %}
+                <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" class="rounded-circle" width="100" height="100">
+            {% else %}
+                <img src="{{ asset('images/placeholderAva.webp') }}" alt="Placeholder" class="rounded-circle" width="100" height="100">
+            {% endif %}
+            <h1 class="p-3 m-5">{{ user.username }}</h1>
+        </div>
+    </div>
 
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             {% for post in posts %}
                 <div class="col">
                     <div class="card shadow-sm">
-                        <img src="{{ post.imageUrl }}" class="card-img-top" alt="post image">
+                        <img src="/uploads/{{ post.imageUrl }}" class="card-img-top" alt="post image">
                         <div class="card-body">
                             <p class="card-text">{{ post.content|slice(0, 100) ~ (post.content|length > 100 ? '...' : '') }}</p>
                             <div class="d-flex justify-content-between align-items-center">
@@ -29,3 +39,4 @@
     </div>
 
 {% endblock %}
+

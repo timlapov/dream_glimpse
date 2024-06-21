@@ -10,6 +10,6 @@ class AddCustomHeaderListener
     {
         $response = $event->getResponse();
 
-        $response->headers->add(['X-DEVELOPED-BY' => 'Lapov']);
+        $response->headers->add(['X-DEVELOPED-BY' => 'Monsieur X']);
     }
 }

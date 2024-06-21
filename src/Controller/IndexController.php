@@ -31,7 +31,7 @@ class IndexController extends AbstractController
         $form->handleRequest($request);
 
         $posts = $postRepository->findBy([], ['createdAt' => 'DESC'], 9);
-//        return $this->render('index/index.html.twig', [
+//        return $this->render('index/registration.html.twig', [
 //            'posts' => $posts,
 //            'newsletterForm' => $form
 //        ]);

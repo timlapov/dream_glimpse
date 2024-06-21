@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use App\Service\FileUploader;
 use App\Service\Text2ImageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -19,15 +22,21 @@ class PostCrudController extends AbstractController
     public function index(PostRepository $postRepository): Response
     {
         return $this->render('post_crud/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $postRepository->findBy([], ['createdAt' => 'DESC']),
         ]);
     }
 
     #[Route('/new', name: 'app_post_crud_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, Text2ImageService $text2ImageService): Response
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        Text2ImageService $text2ImageService,
+        FileUploader $fileUploader,
+    ): Response
     {
         $post = new Post();
         $post->setCreatedAt(new \DateTime());
+        $post->setUser($this->getUser());
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -38,11 +47,20 @@ class PostCrudController extends AbstractController
 //            if ($imageUrl) {
 //                $post->setImageUrl($imageUrl);
 //            }
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('imageUrl')->getData();
+
+            if ($imageFile) {
+                $imageUrl = $fileUploader->upload($imageFile);
+                $post->setImageUrl($imageUrl);
+            }
 
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_post_crud_edit', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Votre article a été publié. Vous pouvez le modifier ou revenir à la page d\'accueil');
+            //return $this->redirectToRoute('app_post_crud_edit', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_index', (array)Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post_crud/new.html.twig', [
@@ -66,9 +84,10 @@ class PostCrudController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
 
-            return $this->redirectToRoute('app_post_crud_index', [], Response::HTTP_SEE_OTHER);
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre article a été modifié. Bonne journée');
+            return $this->redirectToRoute('app_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post_crud/edit.html.twig', [
@@ -77,7 +96,7 @@ class PostCrudController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_crud_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_post_crud_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->get('_token'))) {

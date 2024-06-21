@@ -12,7 +12,11 @@
                 <div class="col">
                     <div class="card d-flex align-items-center" style="padding: 20px; flex-direction: row; height: 150px;">
                         <div class="profile-pic" style="height: 90%; width: auto; background-color: #f0f0f0; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                            <img src="{{ asset('images/placeholderStories1.webp') }}" alt="Profile Picture" style="height: 100%; width: auto;">
+                            {% if user.userImage %}
+                                <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" style="height: 100%; width: auto;">
+                            {% else %}
+                                <img src="{{ asset('images/placeholderAva.webp') }}" alt="Profile Picture" style="height: 100%; width: auto;">
+                            {% endif %}
                         </div>
                         <div class="text-left">
                             <h5 class="card-title">{{ user.username }}</h5>

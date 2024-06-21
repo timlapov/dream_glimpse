@@ -3,37 +3,33 @@
 {% block title %}Post index{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
+    {{ include('navbar.html.twig') }}
+    <h2 class="text-center m-5 pt-3">Tous les articles</h2>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Content</th>
-                <th>ImageUrl</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.content }}</td>
-                <td>{{ post.imageUrl }}</td>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_post_crud_show', {'id': post.id}) }}">show</a>
-                    <a href="{{ path('app_post_crud_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for post in posts %}
+                <div class="col">
+                    <div class="card shadow-sm">
+                        <img src="/uploads/{{ post.imageUrl }}" class="card-img-top" alt="post image">
+                        <div class="card-body">
+                            <p class="card-text">{{ post.content|slice(0, 100) ~ (post.content|length > 100 ? '...' : '') }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Like</a>
+                                    <a href="{{ path('app_post_crud_show', {'id': post.id} ) }}" type="button" class="btn btn-sm btn-outline-secondary">Lire la suite</a>
+                                </div>
+                                <small class="text-body-secondary">{{ post.createdAt|date('d M Y - H:i') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                    <h2 class="text-bg-danger">Aucun enregistrement n'a été trouvé</h2>
+            {% endfor %}
+        </div>
+    </div>
 
-    <a href="{{ path('app_post_crud_new') }}">Create new</a>
+
+
 {% endblock %}

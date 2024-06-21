@@ -2,29 +2,35 @@
 
 namespace App\Form;
 
-use App\Entity\Post;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 
-class PostType extends AbstractType
+class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('content', TextareaType::class, [
-                'attr' => [
-                    'placeholder' => 'Entrez votre contenu',
-                    'rows' => 10,
-                ]
+            ->add('email', EmailType::class)
+            ->add('password', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => false,
+                    'attr' => ['placeholder' => 'Mot de passe']
+                ],
+                'second_options' => [
+                    'label' => false,
+                    'attr' => ['placeholder' => 'Répéter le mot de passe']
+                ],
             ])
-            ->add('imageUrl', FileType::class, [
+            ->add('userImage', FileType::class, [
                 'constraints' => [
                     new File([
                         'maxSize' => '10024k',
@@ -41,17 +47,13 @@ class PostType extends AbstractType
                     ])
                 ],
             ])
-//            ->add('user', EntityType::class, [
-//                'class' => User::class,
-//                'choice_label' => 'userName',
-//            ])
-        ;
+            ->add('username', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Post::class,
+            'data_class' => User::class,
         ]);
     }
 }

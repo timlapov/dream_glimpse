@@ -31,6 +31,10 @@ services:
             $apiKey: '%app.api_key%'
             $secretKey: '%app.secret_key%'
             $apiUrl: '%app.api_url%'
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
+            $slugger: '@slugger'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     App\EventListener\AddCustomHeaderListener:

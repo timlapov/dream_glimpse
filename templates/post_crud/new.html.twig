@@ -5,34 +5,27 @@
 {% block body %}
     {{ include('navbar.html.twig') }}
 
-    <h1 class="text-center mt-5 p-1">Create new Post</h1>
-
+    <h1 class="text-center mt-5 p-1">Créer un nouvel article</h1>
     {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="m-3 col-lg-6 col-md-11">
                 <div class="form-group">
-                    {{ form_label(form.content, 'Content', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre contenu'}}) }}
+                    {{ form_label(form.content, 'Contenu', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.content, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Dites-nous de quoi vous avez rêvé aujourd\'hui'}}) }}
                     {{ form_errors(form.content) }}
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.imageUrl, 'Image URL', {'label_attr': {'class': 'control-label'}}) }}
+                    {{ form_label(form.imageUrl, 'Image', {'label_attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.imageUrl, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.imageUrl) }}
                 </div>
-                <div class="form-group">
-                    {{ form_label(form.createdAt, 'Created At', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.createdAt, {'attr': {'class': 'form-control', 'readonly': true}}) }}
-                    {{ form_errors(form.createdAt) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.user, 'User', {'label_attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(form.user) }}
-                </div>
-                <button class="btn btn-dark mt-3">{{ button_label|default('Save') }}</button>
+{#                <div class="form-group">#}
+{#                    {{ form_label(form.user, 'User', {'label_attr': {'class': 'control-label'}}) }}#}
+{#                    {{ form_widget(form.user, {'attr': {'class': 'form-control', 'value': app.user.id}}) }}#}
+{#                    {{ form_errors(form.user) }}#}
+{#                </div>#}
+                <button class="btn btn-dark mt-3">{{ button_label|default('Sauvegarder') }}</button>
             </div>
         </div>
     </div>
