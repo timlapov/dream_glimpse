@@ -8,7 +8,7 @@
 
     <div class="container my-5">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-            {% for user in users %}
+            {% for user in pagination %}
                 <div class="col">
                     <div class="card d-flex align-items-center" style="padding: 20px; flex-direction: row; height: 150px;">
                         <div class="profile-pic" style="height: 90%; width: auto; background-color: #f0f0f0; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
@@ -26,6 +26,10 @@
                 </div>
             {% endfor %}
         </div>
+    </div>
+
+    <div class="navigation d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
     </div>
 
 {% endblock %}

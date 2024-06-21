@@ -14,15 +14,26 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/post')]
 class PostCrudController extends AbstractController
 {
     #[Route('/', name: 'app_post_crud_index', methods: ['GET'])]
-    public function index(PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $postRepository->createQueryBuilder('p')
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            15
+        );
+
         return $this->render('post_crud/index.html.twig', [
-            'posts' => $postRepository->findBy([], ['createdAt' => 'DESC']),
+            'pagination' => $pagination,
         ]);
     }
 
