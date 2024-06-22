@@ -6,6 +6,7 @@
     {{ include('navbar.html.twig') }}
 
     <h1 class="text-center mt-5 p-1">Créer un nouvel article</h1>
+    {% if app.user %}
     {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
     <div class="container">
         <div class="row justify-content-center">
@@ -20,17 +21,25 @@
                     {{ form_widget(form.imageUrl, {'attr': {'class': 'form-control'}}) }}
                     {{ form_errors(form.imageUrl) }}
                 </div>
-{#                <div class="form-group">#}
-{#                    {{ form_label(form.user, 'User', {'label_attr': {'class': 'control-label'}}) }}#}
-{#                    {{ form_widget(form.user, {'attr': {'class': 'form-control', 'value': app.user.id}}) }}#}
-{#                    {{ form_errors(form.user) }}#}
-{#                </div>#}
                 <button class="btn btn-dark mt-3">{{ button_label|default('Sauvegarder') }}</button>
             </div>
         </div>
     </div>
-
     {{ form_end(form) }}
-
+    {% else %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="m-3 col-lg-6 col-md-11">
+            <div class="alert alert-secondary" role="alert">
+                <p>Pour publier un article, vous devez être connecté.</p>
+                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                    <a href="{{ path('app_login') }}" type="button" class="btn btn-outline-info">Connecter</a>
+                    <a href="{{ path('app_registration') }}" type="button" class="btn btn-outline-warning">S'inscrire</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endif %}
 
 {% endblock %}

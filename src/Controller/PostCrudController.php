@@ -91,6 +91,7 @@ class PostCrudController extends AbstractController
     #[Route('/{id}/edit', name: 'app_post_crud_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('POST_EDIT', $post);
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
@@ -110,6 +111,7 @@ class PostCrudController extends AbstractController
     #[Route('/delete/{id}', name: 'app_post_crud_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('POST_DELETE', $post);
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();

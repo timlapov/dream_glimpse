@@ -13,11 +13,17 @@
         {% if app.user %}
             <div class="mb-3">
                 Vous êtes connecté en tant que <strong>{{ app.user.userName }}</strong><br>
-                <a href="{{ path('app_logout') }}" class="btn btn-sm btn-danger mt-3">Déconnexion</a>
+                <a href="{{ path('app_logout') }}" class="btn btn-sm btn-danger mt-3">Déconnecter</a>
             </div>
-        {% endif %}
-
-        {% if not app.user %}
+        {% else %}
+        <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ path('app_login') }}">Connecter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_registration') }}">S'inscrire</a>
+            </li>
+        </ul>
         <h1 class="h3 mb-3 font-weight-normal">Veuillez vous identifier</h1>
         <label for="username" class="mb-1">Email</label>
         <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>

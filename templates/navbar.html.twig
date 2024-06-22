@@ -15,14 +15,19 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_post_crud_new') }}">Ajouter un poste</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Mon Compte
-                    </a>
-                </li>
+                {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_user_show', {'id': app.user.id}) }}">
+                            Mon Compte
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
-            <a href="{{ path('app_login') }}" class="btn btn-outline-info me-1">Connecter/Déconnecter</a>
-            <a href="{{ path('app_registration') }}" class="btn btn-outline-warning">S'inscrire</a>
+            {% if app.user %}
+            <a href="{{ path('app_login') }}" class="btn btn-outline-secondary me-1">Déconnecter</a>
+            {% else %}
+            <a href="{{ path('app_login') }}" class="btn btn-outline-secondary me-1">Connecter</a>
+            {% endif %}
         </div>
     </div>
 </nav>

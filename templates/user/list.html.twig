@@ -10,18 +10,25 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             {% for user in pagination %}
                 <div class="col">
-                    <div class="card d-flex align-items-center" style="padding: 20px; flex-direction: row; height: 150px;">
-                        <div class="profile-pic" style="height: 90%; width: auto; background-color: #f0f0f0; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
-                            {% if user.userImage %}
-                                <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" style="height: 100%; width: auto;">
-                            {% else %}
-                                <img src="{{ asset('images/placeholderAva.webp') }}" alt="Profile Picture" style="height: 100%; width: auto;">
-                            {% endif %}
+                    <div class="card d-flex align-items-center shadow flex-column" style="padding: 20px; height: auto;">
+                        <div class="d-flex align-items-center" style="flex-direction: row; width: 100%;"> <!-- Добавлен div для содержимого карточки -->
+                            <div class="profile-pic" style="height: 90px; width: 90px; background-color: #f0f0f0; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                {% if user.userImage %}
+                                    <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" style="height: 100%; width: auto;">
+                                {% else %}
+                                    <img src="{{ asset('images/placeholderAva.webp') }}" alt="Profile Picture" style="height: 100%; width: auto;">
+                                {% endif %}
+                            </div>
+                            <div class="text-left">
+                                <h5 class="card-title">{{ user.username }}</h5>
+                                <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-outline-secondary">Regarder {{ user.posts|length }} articles</a>
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <h5 class="card-title">{{ user.username }}</h5>
-                            <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-primary">Regarder {{ user.posts|length }} articles</a>
-                        </div>
+{#                        {% if is_granted() %}#}
+{#                        <div class="delete-button-container" style="width: 100%; margin-top: 20px;">#}
+{#                            <button class="delete-button btn btn-danger" style="width: 90%;">Удалить пользователя</button>#}
+{#                        </div>#}
+{#                        {% endif %}#}
                     </div>
                 </div>
             {% endfor %}

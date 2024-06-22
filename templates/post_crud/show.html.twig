@@ -4,25 +4,32 @@
 
 {% block body %}
     {{ include('navbar.html.twig') }}
-    <h1 class="text-center m-5 p-3">Post</h1>
+    <h1 class="text-center m-5 p-3">Rêve de {{ post.user.username }}</h1>
 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 g-4">
                     <div class="col mx-auto">
-                        <div class="card shadow-sm">
+                        <div class="card shadow-lg">
                             <img src="/uploads/{{ post.imageUrl }}" class="card-img-top" alt="post image">
                             <div class="card-body">
                                 <p class="card-text">{{ post.content }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
+
                                     <div class="btn-group">
+                                        <a href="#" type="button" class="btn btn-sm btn-outline-secondary">Like</a>
+                                        {% if is_granted('POST_EDIT', post) %}
                                         <a href="{{ path('app_post_crud_edit', {'id': post.id} ) }}" type="button" class="btn btn-sm btn-outline-secondary">Modifier</a>
+                                        {% endif %}
+                                        {% if is_granted('POST_DELETE', post) %}
 {#                                        <a href="{{ path('app_post_crud_delete', {'id': post.id}) }}" type="button" class="btn btn-sm btn-outline-danger">Supprimer</a>#}
                                         <form method="post" action="{{ path('app_post_crud_delete', {'id': post.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');" >
                                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
                                             <button class="btn btn-sm btn-outline-danger" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">Supprimer</button>
                                         </form>
+                                        {% endif %}
                                     </div>
+
                                     <small class="text-body-secondary">{{ post.createdAt|date('d M Y - H:i') }}</small>
                                 </div>
                             </div>
@@ -31,5 +38,4 @@
             </div>
         </div>
     </div>
-    {{ include('post_crud/_delete_form.html.twig') }}
 {% endblock %}

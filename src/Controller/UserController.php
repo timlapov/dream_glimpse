@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationType;
+use App\Form\UserEditType;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use App\Service\FileUploader;
@@ -68,7 +69,7 @@ class UserController extends AbstractController
         }
     }
 
-    #[Route('/users/{id}', name: 'app_user_show')]
+    #[Route('/users/{id}', name: 'app_user_show', methods: ['GET'])]
     public function postsByUser(
         User $user,
         PostRepository $postRepository,
@@ -92,5 +93,39 @@ class UserController extends AbstractController
             'user' => $user,
             'pagination' => $pagination,
         ]);
+    }
+
+    #[Route('/users/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('USER_EDIT', $user);
+
+        $form = $this->createForm(UserEditType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->flush();
+            $this->addFlash('success', 'Votre profile a été modifié. Bonne journée');
+            return $this->redirectToRoute('app_user_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+            }
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('users/{id}', name: 'app_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('USER_DELETE', $user);
+
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_user_list');
     }
 }
