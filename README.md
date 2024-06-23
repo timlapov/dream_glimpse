@@ -33,9 +33,10 @@ Dream Glimpse est une application web développée avec Symfony 6.4 qui permet a
    composer install
    ```
 
-3. Configurez votre base de données dans le fichier `.env.local` :
+3. Configurez votre base de données et le server SMTP dans le fichier `.env.local` :
    ```
    DATABASE_URL="mysql://username:password@127.0.0.1:3306/dream_glimpse?serverVersion=8.0"
+   MAILER_DSN=smtp://localhost:1025
    ```
 
 4. Créez la base de données :
@@ -53,7 +54,7 @@ Dream Glimpse est une application web développée avec Symfony 6.4 qui permet a
    php bin/console doctrine:fixtures:load
    ```
 
-7. Lancez le serveur de développement :
+7. Lancez le serveur de développement (vous devez également lancer votre serveur SMTP pour tester la réception des courriels) :
    ```
    symfony serve --no-tls
    ```
