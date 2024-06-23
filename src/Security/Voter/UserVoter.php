@@ -30,12 +30,28 @@ class UserVoter extends Voter
         $user = $token->getUser();
 
         // if the user is anonymous, do not grant access
+//        if (!$user instanceof UserInterface) {
+//            return false;
+//        }
+//
+//        if ($this->security->isGranted('ROLE_ADMIN') || $token->getUser() === $user) {
+//            return true;
+//        }
+//
+//        return false;
+
         if (!$user instanceof UserInterface) {
             return false;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN') || $token->getUser() === $user) {
+        // Check if the current user is an admin
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
+        }
+
+        // Check if the current user is viewing their own profile
+        if ($attribute === self::EDIT || $attribute === self::DELETE) {
+            return $subject === $user;
         }
 
         return false;

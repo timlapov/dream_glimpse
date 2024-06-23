@@ -37,7 +37,7 @@ class AppFixtures extends Fixture
                 $post = new Post();
                 $post->setContent($item['story']);
                 $post->setImageUrl($item['image']);
-                $post->setCreatedAt(new \DateTime());
+                $post->setCreatedAt($faker->dateTimeBetween('-7 years'));
 
                 $post->setUser($users[array_rand($users)]);
 

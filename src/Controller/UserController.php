@@ -10,11 +10,14 @@ use App\Repository\UserRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UserController extends AbstractController
 {
@@ -117,15 +120,32 @@ class UserController extends AbstractController
     }
 
     #[Route('users/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(
+        Request $request,
+        User $user,
+        EntityManagerInterface $entityManager,
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authChecker
+    ): Response
     {
         $this->denyAccessUnlessGranted('USER_DELETE', $user);
 
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($user);
-            $entityManager->flush();
+        if ($authChecker->isGranted('ROLE_ADMIN') && $user === $this->getUser()) {
+            $this->addFlash('danger', 'Un administrateur ne peut pas se supprimer lui-même. Accédez à la base de données via phpMyAdmin ou la ligne de commande. Je vous souhaite une excellente journée.');
+            return $this->redirectToRoute('app_index');
         }
 
-        return $this->redirectToRoute('app_user_list');
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->get('_token'))) {
+            $entityManager->remove($user);
+            $entityManager->flush();
+
+            if (!$authChecker->isGranted('ROLE_ADMIN')) {
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+            }
+
+            $this->addFlash('success', 'Profile a été supprimé. Bonne journée');
+        }
+        return $this->redirectToRoute('app_index');
     }
 }

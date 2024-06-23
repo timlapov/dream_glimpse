@@ -5,26 +5,42 @@
 {% block body %}
     {{ include('navbar.html.twig') }}
     <div class="container p-3 m-5">
-        <h1 class="h3 mb-3 font-weight-normal">Modifier un profil</h1>
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <h1 class="h3 mb-3 font-weight-normal">Modifier un profil</h1>
 
-        {{ form_start(form, {'attr': {'class': 'form-control g-3'}}) }}
+                {{ form_start(form, {'attr': {'class': 'form-control g-3'}}) }}
+                <div class="text-center m-2">
+                    {% if user.userImage %}
+                        <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }} Avatar" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <img src="{{ asset('images/placeholderAva.webp') }}" alt="Default Avatar" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% endif %}
+                </div>
 
-        <div class="form-group">
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email, {'attr': {'class': 'form-control mb-3', 'readonly': 'readonly'}}) }}
-            {{ form_errors(form.email) }}
+                <div class="form-group">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control mb-3', 'readonly': 'readonly'}}) }}
+                    {{ form_errors(form.email) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.username, 'Votre nouveau nom') }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control mb-3'}}) }}
+                    {{ form_errors(form.username) }}
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+
+                        <button type="submit" class="btn btn-dark mt-3 mb-3">Mettre à jour</button>
+
+                        {{ form_end(form) }}
+                        <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce profil ? Tous vos articles seront également supprimés de notre site.');" class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                            <button class="btn btn-danger mt-3 mb-3">Supprimer ce profil</button>
+                        </form>
+                </div>
+                <a href="{{ path('app_index') }}" class="btn btn-outline-secondary mt-3">Retour à l'accueil</a>
+            </div>
         </div>
-
-        <div class="form-group">
-            {{ form_label(form.username, 'Votre nouveau nom') }}
-            {{ form_widget(form.username, {'attr': {'class': 'form-control mb-3'}}) }}
-            {{ form_errors(form.username) }}
-        </div>
-
-        <button type="submit" class="btn btn-dark mt-3 mb-3">Mise à jour</button>
-
-        {{ form_end(form) }}
-
-        <a href="{{ path('app_index') }}" class="btn btn-outline-secondary mt-3">Retour à l'accueil</a>
     </div>
 {% endblock %}

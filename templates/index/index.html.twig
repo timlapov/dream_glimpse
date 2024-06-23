@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Dream Glimpse – Accueil{% endblock %}
 
 {% block body %}
 {{ include('navbar.html.twig') }}
@@ -12,10 +12,10 @@
                 <div class="col-lg-6 col-md-8 mx-auto">
                     <h1 class="fw-light">Bienvenue sur le site Dream Glimpse</h1>
                     <p class="lead text-body-secondary">Ici, nous racontons nos rêves et l'illustration est générée automatiquement. Envie d'essayer ?</p>
-                    <p>
+                        <div class="btn-group">
                         <a href="{{ path('app_registration') }}" class="btn btn-dark my-2">Inscrivez-vous</a>
                         <a href="{{ path('app_post_crud_new') }}" class="btn btn-secondary my-2">Publiez votre rêve</a>
-                    </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -61,7 +61,7 @@
             <div class="row align-items-center">
                 <div class="col-md-6">
                     <h5 class="newsletter-header">Inscrivez-vous à notre newsletter</h5>
-                    <p class="newsletter-text">Digest mensuel des nouveautés et des événements excitants de notre part.</p>
+                    <p class="newsletter-text">Une fois par semaine, nous vous enverrons les meilleurs articles de nos utilisateurs, ainsi que des informations sur les nouvelles fonctionnalités du service.</p>
                 </div>
                 <div class="col-md-6">
                     <form method="post" action="{{ path('app_index') }}">

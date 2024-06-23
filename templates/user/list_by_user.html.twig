@@ -1,18 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Utilisateurs{% endblock %}
+{% block title %}Utilisateur – {{ app.user.username }}{% endblock %}
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
 
 {% block body %}
     {{ include('navbar.html.twig') }}
 
-    <div class="container p-3 m-5">
-        <div class="d-flex align-items-center">
+    <div class="container p-3 my-5">
+        <div class="d-flex flex-column align-items-center text-center">
             {% if user.userImage %}
-                <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" class="rounded-circle" width="100" height="100">
+                <img src="/uploads/{{ user.userImage }}" alt="{{ user.username }}" class="rounded-circle mb-3" width="100" height="100">
             {% else %}
-                <img src="{{ asset('images/placeholderAva.webp') }}" alt="Placeholder" class="rounded-circle" width="100" height="100">
+                <img src="{{ asset('images/placeholderAva.webp') }}" alt="Placeholder" class="rounded-circle mb-3" width="100" height="100">
             {% endif %}
-            <h1 class="p-3 m-5">{{ user.username }}</h1>
+            <div class="d-flex align-items-center">
+                <h1 class="mb-0 me-2">{{ user.username }}</h1>
+                {% if is_granted('USER_EDIT', user) %}
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-link p-0 text-secondary" aria-label="Modifier ce profil">
+                        <i class="bi bi-pencil-fill fs-4 transition"></i>
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </div>
 

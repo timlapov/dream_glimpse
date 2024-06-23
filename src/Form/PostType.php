@@ -25,9 +25,12 @@ class PostType extends AbstractType
                 ]
             ])
             ->add('imageUrl', FileType::class, [
+                'label' => 'Image (JPEG, PNG, GIF file)',
+                'mapped' => false,
+                'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '10024k',
+                        'maxSize' => '1024k',
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',
@@ -41,10 +44,6 @@ class PostType extends AbstractType
                     ])
                 ],
             ])
-//            ->add('user', EntityType::class, [
-//                'class' => User::class,
-//                'choice_label' => 'userName',
-//            ])
         ;
     }
 
