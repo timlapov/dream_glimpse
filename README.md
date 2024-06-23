@@ -24,7 +24,7 @@ Dream Glimpse est une application web développée avec Symfony 6.4 qui permet a
 
 1. Clonez le dépôt :
    ```
-   git clone https://github.com/votre-username/dream-glimpse.git
+   git clone https://github.com/timlapov/dream-glimpse.git
    cd dream-glimpse
    ```
 
